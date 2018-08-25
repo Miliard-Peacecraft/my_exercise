@@ -2,8 +2,8 @@
 
 class Node {
 public:
-	Node() : value(0), rightChild(nullptr), leftChild(nullptr) {}
-	int value;
+	Node(const int initValue) : value(initValue), rightChild(nullptr), leftChild(nullptr) {}
+	const int value;
 	Node *rightChild;
 	Node *leftChild;
 };
@@ -14,14 +14,14 @@ public:
 	~BinarySerachTree();
 	bool Insert(const int value);
 	bool Remove(const int value);
-	int GetHeight();
-	int GetNodeNum();
+	int GetHeight() const;
+	int GetNodeNum() const;
 	void Print();
 
 private:
 	void _Relase(Node *node);
-	void _GetHeight(Node *node, int height, int &maxHeight);
-	void _GetNodeNum(Node *node, int &n);
+	int _GetHeight(const Node *node) const;
+	int _GetNodeNum(const Node *node) const;
 	void _Print(Node *node);
 
 	Node *_root;

@@ -1,4 +1,8 @@
+#include "pch.h"
+
 #include "BinarySearchTree.h"
+
+#include <iostream>
 
 BinarySerachTree::~BinarySerachTree() {
 	_Relase(_root);
@@ -18,8 +22,7 @@ bool BinarySerachTree::Insert(const int value) {
 			return false;
 		}
 	}
-	(*node) = new Node();
-	(*node)->value = value;
+	(*node) = new Node(value);
 	return true;
 }
 
@@ -74,16 +77,12 @@ bool BinarySerachTree::Remove(const int value) {
 	return true;
 }
 
-int BinarySerachTree::GetHeight() {
-	int height = 0;
-	_GetHeight(_root, 0, height);
-	return height;
+int BinarySerachTree::GetHeight() const {
+	return _GetHeight(_root);
 }
 
-int BinarySerachTree::GetNodeNum() {
-	int n = 0;
-	_GetNodeNum(_root, n);
-	return n;
+int BinarySerachTree::GetNodeNum() const {
+	return _GetNodeNum(_root);
 }
 
 void BinarySerachTree::Print() {
@@ -99,24 +98,20 @@ void BinarySerachTree::_Relase(Node *node) {
 	delete node;
 }
 
-void BinarySerachTree::_GetHeight(Node *node, int height, int &maxHeight) {
+int BinarySerachTree::_GetHeight(const Node *node) const {
 	if (nullptr == node) {
-		if (height > maxHeight) {
-			maxHeight = height;
-		}
-		return;
+		return 0;
 	}
-	_GetHeight(node->leftChild, height + 1, maxHeight);
-	_GetHeight(node->rightChild, height + 1, maxHeight);
+	const int lHeight = _GetHeight(node->leftChild);
+	const int rHeight = _GetHeight(node->rightChild);
+	return (lHeight > rHeight ? lHeight : rHeight) + 1;
 }
 
-void BinarySerachTree::_GetNodeNum(Node *node, int &n) {
+int BinarySerachTree::_GetNodeNum(const Node *node) const {
 	if (nullptr == node) {
-		return;
+		return 0;
 	}
-	_GetNodeNum(node->leftChild, n);
-	_GetNodeNum(node->rightChild, n);
-	++n;
+	return _GetNodeNum(node->leftChild) + _GetNodeNum(node->rightChild) + 1;
 }
 
 void BinarySerachTree::_Print(Node *node) {
