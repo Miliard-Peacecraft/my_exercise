@@ -151,10 +151,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AVLTree.h" />
     <ClInclude Include="BinarySearchTree.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AVLTree.cpp" />
     <ClCompile Include="BinarySearchTree.cpp" />
     <ClCompile Include="my_exercise.cpp" />
     <ClCompile Include="pch.cpp">

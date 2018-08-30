@@ -21,6 +21,9 @@
     <ClInclude Include="BinarySearchTree.h">
       <Filter>標頭檔</Filter>
     </ClInclude>
+    <ClInclude Include="AVLTree.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -30,6 +33,9 @@
       <Filter>來源檔案</Filter>
     </ClCompile>
     <ClCompile Include="BinarySearchTree.cpp">
+      <Filter>來源檔案</Filter>
+    </ClCompile>
+    <ClCompile Include="AVLTree.cpp">
       <Filter>來源檔案</Filter>
     </ClCompile>
   </ItemGroup>

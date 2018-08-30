@@ -1,8 +1,16 @@
 #include "pch.h"
-
 #include "BinarySearchTree.h"
 
 #include <iostream>
+
+Node::Node(const int initValue) : value(initValue), leftChild(nullptr), rightChild(nullptr) {
+}
+
+Node::~Node() {
+}
+
+BinarySerachTree::BinarySerachTree() : _root(nullptr) {
+}
 
 BinarySerachTree::~BinarySerachTree() {
 	_Relase(_root);
@@ -11,7 +19,7 @@ BinarySerachTree::~BinarySerachTree() {
 bool BinarySerachTree::Insert(const int value) {
 	Node **node = &_root;
 
-	while (*node) {
+	while (nullptr != *node) {
 		if ((*node)->value > value) {
 			node = &(*node)->leftChild;
 		}
@@ -85,7 +93,7 @@ int BinarySerachTree::GetNodeNum() const {
 	return _GetNodeNum(_root);
 }
 
-void BinarySerachTree::Print() {
+void BinarySerachTree::Print() const {
 	_Print(_root);
 }
 
@@ -114,7 +122,7 @@ int BinarySerachTree::_GetNodeNum(const Node *node) const {
 	return _GetNodeNum(node->leftChild) + _GetNodeNum(node->rightChild) + 1;
 }
 
-void BinarySerachTree::_Print(Node *node) {
+void BinarySerachTree::_Print(Node *node) const {
 	if (nullptr == node) {
 		return;
 	}
