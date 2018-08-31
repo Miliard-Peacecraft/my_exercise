@@ -26,5 +26,5 @@ private:
 	void _Relase(Node *node);
 	int _GetHeight(const Node *node) const;
 	int _GetNodeNum(const Node *node) const;
-	void _Print(Node *node) const;
+	void _Print(const Node *node) const;
 };
