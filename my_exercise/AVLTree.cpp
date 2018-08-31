@@ -26,9 +26,7 @@ bool AVLTree::_Insert(Node* &node, const int value, bool &updateBalance) {
 	if (value < node->value) {
 		if (_Insert(node->leftChild, value, updateBalance)) {
 			if (updateBalance) {
-				int &nodeBalance = dynamic_cast<AVLNode*>(node)->balance;
-
-				if (-1 > --nodeBalance) {
+				if (-1 > --dynamic_cast<AVLNode*>(node)->balance) {
 					const int leftChildBalance = dynamic_cast<AVLNode*>(node->leftChild)->balance;
 					switch (leftChildBalance)
 					{
@@ -45,7 +43,7 @@ bool AVLTree::_Insert(Node* &node, const int value, bool &updateBalance) {
 					}
 				}
 
-				updateBalance = (0 != nodeBalance);
+				updateBalance = (0 != dynamic_cast<AVLNode*>(node)->balance);
 			}
 		}
 		else {
@@ -55,9 +53,7 @@ bool AVLTree::_Insert(Node* &node, const int value, bool &updateBalance) {
 	else if (value > node->value) {
 		if (_Insert(node->rightChild, value, updateBalance)) {
 			if (updateBalance) {
-				int &nodeBalance = dynamic_cast<AVLNode*>(node)->balance;
-
-				if (1 < ++nodeBalance) {
+				if (1 < ++dynamic_cast<AVLNode*>(node)->balance) {
 					const int rightChildBalance = dynamic_cast<AVLNode*>(node->rightChild)->balance;
 					switch (rightChildBalance)
 					{
@@ -74,7 +70,7 @@ bool AVLTree::_Insert(Node* &node, const int value, bool &updateBalance) {
 					}
 				}
 
-				updateBalance = (0 != nodeBalance);
+				updateBalance = (0 != dynamic_cast<AVLNode*>(node)->balance);
 			}
 		}
 		else {
