@@ -32,7 +32,7 @@ bool AVLTree::_Insert(Node* &node, const int value, bool &updateBalance) {
 						_RotateRight(node);
 						break;
 					case 1:
-						_RotateLeft(node);
+						_RotateLeft(node->leftChild);
 						_RotateRight(node);
 						break;
 					default:
@@ -63,7 +63,7 @@ bool AVLTree::_Insert(Node* &node, const int value, bool &updateBalance) {
 						_RotateLeft(node);
 						break;
 					case -1:
-						_RotateRight(node);
+						_RotateRight(node->rightChild);
 						_RotateLeft(node);
 						break;
 					default:
@@ -89,11 +89,11 @@ bool AVLTree::_Insert(Node* &node, const int value, bool &updateBalance) {
 }
 
 /*
-		A                      C
-	   / \                    / \
-	  B   C                 A     E
-		 / \     =>        / \
-		D   E             B   D
+     A                    C
+    / \                  / \
+   B   C       =>       A   E
+      / \              / \
+     D   E            B   D
 */
 void AVLTree::_RotateLeft(Node* &node) {
 	AVLNode *nodeA = dynamic_cast<AVLNode*>(node);
@@ -110,11 +110,11 @@ void AVLTree::_RotateLeft(Node* &node) {
 }
 
 /*
-		A                      B
-	   / \                    / \
-	  B   C                 D     A
-	 / \         =>              / \
-	D   E                       E   C
+     A                    B
+    / \                  / \
+   B   C       =>       D   A
+  / \                      / \
+ D   E                    E   C
 */
 void AVLTree::_RotateRight(Node* &node) {
 	AVLNode *nodeA = dynamic_cast<AVLNode*>(node);
