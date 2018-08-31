@@ -20,10 +20,10 @@ bool BinarySerachTree::Insert(const int value) {
 	Node **node = &_root;
 
 	while (nullptr != *node) {
-		if ((*node)->value > value) {
+		if (value < (*node)->value) {
 			node = &(*node)->leftChild;
 		}
-		else if ((*node)->value < value) {
+		else if (value > (*node)->value) {
 			node = &(*node)->rightChild;
 		}
 		else {
@@ -31,44 +31,45 @@ bool BinarySerachTree::Insert(const int value) {
 		}
 	}
 	(*node) = new Node(value);
+
 	return true;
 }
 
 bool BinarySerachTree::Remove(const int value) {
-	Node **targetNode = &_root;
+	Node **node = &_root;
 
-	while (*targetNode) {
-		if (value < (*targetNode)->value) {
-			targetNode = &(*targetNode)->leftChild;
+	while (*node) {
+		if (value < (*node)->value) {
+			node = &(*node)->leftChild;
 		}
-		else if (value > (*targetNode)->value) {
-			targetNode = &(*targetNode)->rightChild;
+		else if (value > (*node)->value) {
+			node = &(*node)->rightChild;
 		}
 		else {
 			break;
 		}
 	}
 
-	if (nullptr == (*targetNode)) {
+	if (nullptr == *node) {
 		return false;
 	}
 	else {
-		if ((nullptr == (*targetNode)->leftChild) && (nullptr == (*targetNode)->rightChild)) {
-			delete *targetNode;
-			*targetNode = nullptr;
+		if ((nullptr == (*node)->leftChild) && (nullptr == (*node)->rightChild)) {
+			delete *node;
+			*node = nullptr;
 		}
-		else if (nullptr == (*targetNode)->rightChild) {
-			Node *temp = (*targetNode);
-			*targetNode = (*targetNode)->leftChild;
+		else if (nullptr == (*node)->rightChild) {
+			Node *temp = *node;
+			*node = (*node)->leftChild;
 			delete temp;
 		}
-		else if (nullptr == (*targetNode)->leftChild) {
-			Node *temp = (*targetNode);
-			*targetNode = (*targetNode)->rightChild;
+		else if (nullptr == (*node)->leftChild) {
+			Node *temp = (*node);
+			*node = (*node)->rightChild;
 			delete temp;
 		}
 		else {
-			Node **leftMax = &(*targetNode)->leftChild;
+			Node **leftMax = &(*node)->leftChild;
 
 			while (nullptr != (*leftMax)->rightChild) {
 				leftMax = &(*leftMax)->rightChild;
@@ -76,10 +77,10 @@ bool BinarySerachTree::Remove(const int value) {
 
 			Node *temp = *leftMax;
 			*leftMax = (*leftMax)->leftChild;
-			temp->leftChild = (*targetNode)->leftChild;
-			temp->rightChild = (*targetNode)->rightChild;
-			delete *targetNode;
-			*targetNode = temp;
+			temp->leftChild = (*node)->leftChild;
+			temp->rightChild = (*node)->rightChild;
+			delete *node;
+			*node = temp;
 		}
 	}
 	return true;
@@ -122,7 +123,7 @@ int BinarySerachTree::_GetNodeNum(const Node *node) const {
 	return _GetNodeNum(node->leftChild) + _GetNodeNum(node->rightChild) + 1;
 }
 
-void BinarySerachTree::_Print(Node *node) const {
+void BinarySerachTree::_Print(const Node *node) const {
 	if (nullptr == node) {
 		return;
 	}
