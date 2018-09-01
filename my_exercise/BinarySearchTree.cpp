@@ -38,7 +38,7 @@ bool BinarySerachTree::Insert(const int value) {
 bool BinarySerachTree::Remove(const int value) {
 	Node **node = &_root;
 
-	while (*node) {
+	while (nullptr != *node) {
 		if (value < (*node)->value) {
 			node = &(*node)->leftChild;
 		}
@@ -83,6 +83,7 @@ bool BinarySerachTree::Remove(const int value) {
 			*node = temp;
 		}
 	}
+
 	return true;
 }
 
@@ -102,6 +103,7 @@ void BinarySerachTree::_Relase(Node *node) {
 	if (nullptr == node) {
 		return;
 	}
+
 	_Relase(node->leftChild);
 	_Relase(node->rightChild);
 	delete node;
@@ -111,6 +113,7 @@ int BinarySerachTree::_GetHeight(const Node *node) const {
 	if (nullptr == node) {
 		return 0;
 	}
+
 	const int lHeight = _GetHeight(node->leftChild);
 	const int rHeight = _GetHeight(node->rightChild);
 	return (lHeight > rHeight ? lHeight : rHeight) + 1;
@@ -120,6 +123,7 @@ int BinarySerachTree::_GetNodeNum(const Node *node) const {
 	if (nullptr == node) {
 		return 0;
 	}
+
 	return _GetNodeNum(node->leftChild) + _GetNodeNum(node->rightChild) + 1;
 }
 
@@ -127,6 +131,7 @@ void BinarySerachTree::_Print(const Node *node) const {
 	if (nullptr == node) {
 		return;
 	}
+
 	_Print(node->leftChild);
 	std::cout << node->value << std::endl;
 	_Print(node->rightChild);

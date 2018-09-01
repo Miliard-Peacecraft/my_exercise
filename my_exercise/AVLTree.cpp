@@ -84,7 +84,7 @@ bool AVLTree::_Insert(Node* &node, const int value, bool &updateBalance) {
 	return true;
 }
 
-bool AVLTree::_Remove(Node* &node, const int value, bool &updateBalance){
+bool AVLTree::_Remove(Node* &node, const int value, bool &updateBalance) {
 	if (nullptr == node) {
 		return false;
 	}
@@ -96,7 +96,7 @@ bool AVLTree::_Remove(Node* &node, const int value, bool &updateBalance){
 		return _RemoveRight(node, value, updateBalance);
 	}
 	else {
-		if (nullptr == node->leftChild && nullptr == node->rightChild) {
+		if ((nullptr == node->leftChild) && (nullptr == node->rightChild)) {
 			delete node;
 			node = nullptr;
 			updateBalance = true;
@@ -117,8 +117,7 @@ bool AVLTree::_Remove(Node* &node, const int value, bool &updateBalance){
 bool AVLTree::_RemoveLeft(Node* &node, const int value, bool &updateBalance) {
 	if (_Remove(node->leftChild, value, updateBalance)) {
 		if (updateBalance) {
-			int &nodeBalance = dynamic_cast<AVLNode*>(node)->balance;
-			if (1 < ++nodeBalance) {
+			if (1 < ++dynamic_cast<AVLNode*>(node)->balance) {
 				if (-1 < dynamic_cast<AVLNode*>(node->rightChild)->balance) {
 					_RotateLeft(node);
 				}
@@ -128,7 +127,7 @@ bool AVLTree::_RemoveLeft(Node* &node, const int value, bool &updateBalance) {
 				}
 			}
 
-			updateBalance = (0 == nodeBalance);
+			updateBalance = (0 == dynamic_cast<AVLNode*>(node)->balance);
 		}
 	}
 	else {
@@ -141,8 +140,7 @@ bool AVLTree::_RemoveLeft(Node* &node, const int value, bool &updateBalance) {
 bool AVLTree::_RemoveRight(Node* &node, const int value, bool &updateBalance) {
 	if (_Remove(node->rightChild, value, updateBalance)) {
 		if (updateBalance) {
-			int &nodeBalance = dynamic_cast<AVLNode*>(node)->balance;
-			if (-1 > --nodeBalance) {
+			if (-1 > --dynamic_cast<AVLNode*>(node)->balance) {
 				if (1 > dynamic_cast<AVLNode*>(node->leftChild)->balance) {
 					_RotateRight(node);
 				}
@@ -152,7 +150,7 @@ bool AVLTree::_RemoveRight(Node* &node, const int value, bool &updateBalance) {
 				}
 			}
 
-			updateBalance = (0 == nodeBalance);
+			updateBalance = (0 == dynamic_cast<AVLNode*>(node)->balance);
 		}
 	}
 	else {
