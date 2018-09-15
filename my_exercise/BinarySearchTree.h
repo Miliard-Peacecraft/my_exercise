@@ -14,7 +14,7 @@ public:
 	BinarySerachTree();
 	virtual ~BinarySerachTree();
 	virtual bool Insert(const int value);
-	virtual bool Remove(const int value);
+	virtual bool Delete(const int value);
 	virtual int GetHeight() const;
 	virtual int GetNodeNum() const;
 	virtual void Print() const;

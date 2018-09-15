@@ -11,9 +11,9 @@ bool AVLTree::Insert(const int value) {
 	return _Insert(_root, value, updateBalance);
 }
 
-bool AVLTree::Remove(const int value) {
+bool AVLTree::Delete(const int value) {
 	bool updateBalance = false;
-	return _Remove(_root, value, updateBalance);
+	return _Delete(_root, value, updateBalance);
 }
 
 bool AVLTree::_Insert(Node* &node, const int value, bool &updateBalance) {
@@ -84,16 +84,21 @@ bool AVLTree::_Insert(Node* &node, const int value, bool &updateBalance) {
 	return true;
 }
 
-bool AVLTree::_Remove(Node* &node, const int value, bool &updateBalance) {
+bool AVLTree::_Delete(Node* &node, const int value, bool &updateBalance) {
 	if (nullptr == node) {
 		return false;
 	}
 
 	if (value < node->value) {
-		return _RemoveLeft(node, value, updateBalance);
+		bool ret = _Delete(node->leftChild, value, updateBalance);
+		_UpdateBalanceForDeleteFromLeftSubtree(node, updateBalance);
+		return ret;
+
 	}
 	else if (value > node->value) {
-		return _RemoveRight(node, value, updateBalance);
+		bool ret = _Delete(node->rightChild, value, updateBalance);
+		_UpdateBalanceForDeleteFromRightSubtree(node, updateBalance);
+		return ret;
 	}
 	else {
 		if ((nullptr == node->leftChild) && (nullptr == node->rightChild)) {
@@ -101,60 +106,27 @@ bool AVLTree::_Remove(Node* &node, const int value, bool &updateBalance) {
 			node = nullptr;
 			updateBalance = true;
 		}
-		else if (1 > dynamic_cast<AVLNode*>(node)->balance) {
-			_RotateRight(node);
-			return _RemoveRight(node, value, updateBalance);
+		else if (nullptr == node->rightChild) {
+			Node *temp = node;
+			node = node->leftChild;
+			delete temp;
+			updateBalance = true;
+		}
+		else if (nullptr == node->leftChild) {
+			Node *temp = node;
+			node = node->rightChild;
+			delete temp;
+			updateBalance = true;
 		}
 		else {
-			_RotateLeft(node);
-			return _RemoveLeft(node, value, updateBalance);
+			AVLNode *temp = _GetMaxSubtree(node->leftChild, updateBalance);
+			temp->leftChild = node->leftChild;
+			temp->rightChild = node->rightChild;
+			temp->balance = dynamic_cast<AVLNode*>(node)->balance;
+			delete node;
+			node = temp;
+			_UpdateBalanceForDeleteFromLeftSubtree(node, updateBalance);
 		}
-	}
-
-	return true;
-}
-
-bool AVLTree::_RemoveLeft(Node* &node, const int value, bool &updateBalance) {
-	if (_Remove(node->leftChild, value, updateBalance)) {
-		if (updateBalance) {
-			if (1 < ++dynamic_cast<AVLNode*>(node)->balance) {
-				if (-1 < dynamic_cast<AVLNode*>(node->rightChild)->balance) {
-					_RotateLeft(node);
-				}
-				else {
-					_RotateRight(node->rightChild);
-					_RotateLeft(node);
-				}
-			}
-
-			updateBalance = (0 == dynamic_cast<AVLNode*>(node)->balance);
-		}
-	}
-	else {
-		return false;
-	}
-
-	return true;
-}
-
-bool AVLTree::_RemoveRight(Node* &node, const int value, bool &updateBalance) {
-	if (_Remove(node->rightChild, value, updateBalance)) {
-		if (updateBalance) {
-			if (-1 > --dynamic_cast<AVLNode*>(node)->balance) {
-				if (1 > dynamic_cast<AVLNode*>(node->leftChild)->balance) {
-					_RotateRight(node);
-				}
-				else {
-					_RotateLeft(node->leftChild);
-					_RotateRight(node);
-				}
-			}
-
-			updateBalance = (0 == dynamic_cast<AVLNode*>(node)->balance);
-		}
-	}
-	else {
-		return false;
 	}
 
 	return true;
@@ -200,4 +172,52 @@ void AVLTree::_RotateRight(Node* &node) {
 
 	nodeA->balance = nodeCHeight;
 	nodeB->balance = (0 > nodeCHeight ? 0 : nodeCHeight) + 1 - nodeDHeight;
+}
+
+void AVLTree::_UpdateBalanceForDeleteFromLeftSubtree(Node* &node, bool &updateBalance) {
+	if (updateBalance) {
+		if (1 < ++dynamic_cast<AVLNode*>(node)->balance) {
+			if (-1 < dynamic_cast<AVLNode*>(node->rightChild)->balance) {
+				_RotateLeft(node);
+			}
+			else {
+				_RotateRight(node->rightChild);
+				_RotateLeft(node);
+			}
+		}
+
+		updateBalance = (0 == dynamic_cast<AVLNode*>(node)->balance);
+	}
+}
+
+void AVLTree::_UpdateBalanceForDeleteFromRightSubtree(Node* &node, bool &updateBalance) {
+	if (updateBalance) {
+		if (-1 > --dynamic_cast<AVLNode*>(node)->balance) {
+			if (1 > dynamic_cast<AVLNode*>(node->leftChild)->balance) {
+				_RotateRight(node);
+			}
+			else {
+				_RotateLeft(node->leftChild);
+				_RotateRight(node);
+			}
+		}
+
+		updateBalance = (0 == dynamic_cast<AVLNode*>(node)->balance);
+	}
+}
+
+AVLNode *AVLTree::_GetMaxSubtree(Node* &node, bool &updateBalance) {
+	if (nullptr == node->rightChild) {
+		AVLNode *temp = dynamic_cast<AVLNode*>(node);
+		node = node->leftChild;
+		temp->leftChild = nullptr;
+		temp->balance = 0;
+		updateBalance = true;
+		return temp;
+	}
+	else {
+		AVLNode *temp = _GetMaxSubtree(node->rightChild, updateBalance);
+		_UpdateBalanceForDeleteFromRightSubtree(node, updateBalance);
+		return temp;
+	}
 }

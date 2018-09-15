@@ -35,7 +35,7 @@ bool BinarySerachTree::Insert(const int value) {
 	return true;
 }
 
-bool BinarySerachTree::Remove(const int value) {
+bool BinarySerachTree::Delete(const int value) {
 	Node **node = &_root;
 
 	while (nullptr != *node) {
